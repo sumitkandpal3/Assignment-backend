@@ -8,9 +8,9 @@ import {
 } from "../Controllers/categoryController.js";
 const router = express.Router();
 
-router.route("/categories").post(verifyJWT, createCategory);
-router.route("/categories").get(verifyJWT, getAllCategory);
-router.route("/categories/:id").put(verifyJWT, updateCategory);
-router.route("/categories/:id").delete(verifyJWT, deleteCategory);
+router.route("/create").post(verifyJWT, createCategory);
+router.route("/all").get(verifyJWT, getAllCategory);
+router.route("/update/:id").put(verifyJWT, updateCategory);
+router.route("/delete/:id").delete(verifyJWT, deleteCategory);
 
 export default router;
