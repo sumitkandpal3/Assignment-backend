@@ -21,7 +21,7 @@ export const userLogin = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.status(200).json({ success: true, message: "succeful login", token });
+    res.status(200).json({ success: true, message: "succeful login", token,user });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -48,7 +48,7 @@ export const userRegister = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.status(201).json({ success: true, message: "done", token });
+    res.status(201).json({ success: true, message: "done", token,user });
   } catch (e) {
     console.log(e);
     return res

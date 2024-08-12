@@ -101,7 +101,7 @@ export const getAllProduct = async (req, res) => {
     const products = await Product.find().populate("category");
     if (!products || products.length == 0) {
       return res
-        .status(404)
+        .status(200)
         .json({ success: false, message: "no Product data found" });
     }
     return res.status(200).json({
