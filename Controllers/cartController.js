@@ -5,7 +5,7 @@ import { Product } from "../Models/productModel.js";
 //Get cart
 export const getCart = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user.id }).populate(
+    const cart = await Cart.findOne({ user: req.user._id }).populate(
       "items.product"
     );
     if (!cart) {
@@ -28,7 +28,7 @@ export const getCart = async (req, res) => {
 export const addItemToCart = async (req, res) => {
   const { productId, quantity } = req.body;
   try {
-    let cart = await Cart.findOne({ user: req.user.id });
+    let cart = await Cart.findOne({ user: req.user._id });
     const product = await Product.findById(productId);
 
     if (!cart) {
@@ -63,7 +63,7 @@ export const addItemToCart = async (req, res) => {
 //remove item from cart
 export const removeItemFromCart = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user.id });
+    const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {
       return res
         .status(400)
@@ -96,10 +96,46 @@ export const removeItemFromCart = async (req, res) => {
   }
 };
 
+//update cart
+export const updateCart = async (req, res) => {
+  try {
+    const cart = await Cart.findOne({ user: req.user._id }).populate("items.product");
+    if (!cart) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Cart not found" });
+    }
+    const itemIndex = cart.items.findIndex(
+      (item) => item._id.toString() === (req.params.ItemId)
+    );
+
+    if (itemIndex === -1) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Item not found in cart" });
+    }
+    const oldPrice=cart.totalPrice;
+    cart.items[itemIndex].quantity=req.body.newQuantity;
+    const product = await Product.findById(cart.items[itemIndex].product);
+   
+    cart.totalPrice += (cart.items[itemIndex].quantity * product.price)-oldPrice;
+
+    await cart.save();
+    return res
+      .status(200)
+      .json({ success: true, message: "Item updated successfully", cart});
+  } catch (e) {
+    console.log(e);
+    return res
+      .status(500)
+      .json({ success: false, message: "Failed to update item from the cart" });
+  }
+};
+
 //clear cart
 export const clearCart = async (req, res) => {
   try {
-    await Cart.findOneAndDelete({ user: req.user.id });
+    await Cart.findOneAndDelete({ user: req.user._id });
     return res.status(200).json({ success: true, message: "Cart cleared" });
   } catch (e) {
     console.log(e);

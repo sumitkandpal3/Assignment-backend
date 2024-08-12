@@ -20,9 +20,9 @@ export const userLogin = async (req, res) => {
       expiresIn: "7d",
     });
 
-    return res.status(200).json({ token });
+    res.status(200).json({ success: true, message: "succeful login", token });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };
 
@@ -47,7 +47,7 @@ export const userRegister = async (req, res) => {
       expiresIn: "7d",
     });
 
-    return res.status(201).json({ token });
+    res.status(201).json({ success: true, message: "done", token });
   } catch (e) {
     console.log(e);
     return res
