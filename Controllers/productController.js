@@ -1,10 +1,19 @@
 import { Category } from "../Models/categories.js";
 import { Product } from "../Models/productModel.js";
+import { v2 as cloudinary } from "cloudinary";
+
+// Configuration
+cloudinary.config({
+  cloud_name: "dwlezv6pr",
+  api_key: "852377643891357",
+  api_secret: "gppmhtXVGd8h_r8lhJyFrbeLcQE",
+});
 
 // create product
 export const createProduct = async (req, res) => {
   const { name, description, price, category, thumbnail, images, stock } =
     req.body;
+
 
   try {
     // Check if all required fields are present
@@ -17,6 +26,7 @@ export const createProduct = async (req, res) => {
       !images ||
       !stock
     ) {
+      console.log(req.body);
       return res.status(400).json({
         success: false,
         message: "Input data is insufficient for creating the product",
@@ -36,6 +46,27 @@ export const createProduct = async (req, res) => {
         message: "Failed to create or find the category",
       });
     }
+
+    // // Upload image to Cloudinary
+    // const result = await cloudinary.uploader.upload(thumbnail, {
+    //   folder: "thumbnail",
+    // });
+
+    // // Get the image URL from Cloudinary
+    // const image = result.secure_url;
+    // console.log("Image URL: " + image);
+
+    // let newImages = [];
+    // for (let image of images) {
+    //   // Upload image to Cloudinary
+    //   let r = await cloudinary.uploader.upload(image, {
+    //     folder: "image",
+    //   });
+
+    //   // Get the image URL from Cloudinary
+    //   let img = r.secure_url;
+    //   newImages.push(img);
+    // }
 
     // Create the product
     const product = new Product({

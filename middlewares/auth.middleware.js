@@ -13,7 +13,6 @@ export const verifyJWT = async (req, res, next) => {
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decodedToken?.id).select("-password");
-    console.log(user);
     if (!user) {
       return res
         .status(401)

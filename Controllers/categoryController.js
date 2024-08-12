@@ -1,4 +1,4 @@
-import { Category} from "../Models/categories.js";
+import { Category } from "../Models/categories.js";
 
 // create a new category
 export const createCategory = async (req, res) => {
@@ -10,14 +10,15 @@ export const createCategory = async (req, res) => {
         message: "Input data is insufficient for creating the category",
       });
     }
-    const category = new category({ name });
+    const category = new Category({ name });
     await category.save();
     return res
       .status(201)
-      .json(
-        { success: true, message: "New category successfully created" },
-        category
-      );
+      .json({
+        success: true,
+        message: "New category successfully created",
+        category,
+      });
   } catch (e) {
     return res
       .status(500)
@@ -36,10 +37,11 @@ export const getAllCategory = async (req, res) => {
     }
     return res
       .status(200)
-      .json(
-        { success: true, message: "Categories fetched successfully" },
-        categories
-      );
+      .json({
+        success: true,
+        message: "Categories fetched successfully",
+        categories,
+      });
   } catch (e) {
     return res
       .status(500)
@@ -64,10 +66,11 @@ export const updateCategory = async (req, res) => {
     }
     return res
       .status(200)
-      .json(
-        { success: true, message: "Category Updated Successfully" },
-        category
-      );
+      .json({
+        success: true,
+        message: "Category Updated Successfully",
+        category,
+      });
   } catch (e) {
     return res
       .status(500)
@@ -86,13 +89,11 @@ export const deleteCategory = async (req, res) => {
         .json({ success: false, message: "Category not found" });
     }
     await Category.findByIdAndDelete(id);
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Category deleted successfully",
-        category: existingCategory,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Category deleted successfully",
+      category: existingCategory,
+    });
   } catch (e) {
     return res
       .status(500)
